@@ -1,0 +1,138 @@
+# ==============================
+# Decorator for adding headers
+# ==============================
+def report_header(title="REPORT"):
+    def decorator(func):
+        def wrapper(*args, **kwargs):
+            print("=" * 40)
+            print(f" {title}")
+            print("=" * 40)
+            func(*args, **kwargs)
+            print("=" * 40)
+        return wrapper
+    return decorator
+
+
+# ==============================
+# Report Class
+# ==============================
+class Report:
+    college = "ABC Engineering College"   # Class attribute
+
+    # Constructor (Magic Method)
+    def __init__(self, name, roll, marks):
+        self.name = name
+        self.roll = roll
+        self.marks = marks
+
+    # Class Method to change college name
+    @classmethod
+    def change_college(cls, new_name):
+        cls.college = new_name
+
+    # Magic Method for string representation
+    def __str__(self):
+        return f"Name : {self.name}\nRoll No : {self.roll}\nMarks : {self.marks}"
+
+    # Decorator applied to display report
+    @report_header("STUDENT REPORT")
+    def display_report(self):
+        print(f"College : {Report.college}")
+        print(self)
+        print("Result : PASS" if self.marks >= 40 else "Result : FAIL")
+
+
+# ==============================
+# Dynamic Template System
+# ==============================
+class TemplateManager:
+    templates = {}
+
+    @classmethod
+    def add_template(cls, name, func):
+        cls.templates[name] = func
+
+    @classmethod
+    def apply_template(cls, name, report_obj):
+        if name in cls.templates:
+            cls.templates[name](report_obj)
+        else:
+            print(f"Template '{name}' not found!")
+
+
+# ==============================
+# Custom Templates
+# ==============================
+def fancy_template(report_obj):
+    print("~" * 50)
+    print(f"*** {report_obj.name.upper()} ***")
+    print(f"Roll: {report_obj.roll} | Marks: {report_obj.marks}")
+    print(f"College: {Report.college}")
+    print("STATUS:", "✔ PASS" if report_obj.marks >= 40 else "✘ FAIL")
+    print("~" * 50)
+
+
+# Register custom template
+TemplateManager.add_template("fancy", fancy_template)
+
+
+# ==============================
+# Main Program
+# ==============================
+student1 = Report("Rahul", 101, 85)
+student1.display_report()
+
+print("\nApplying Fancy Template:\n")
+TemplateManager.apply_template("fancy", student1)
+
+# Change college dynamically
+Report.change_college("XYZ Institute of Technology")
+
+student2 = Report("Priya", 102, 35)
+student2.display_report()
+
+print("\nApplying Fancy Template:\n")
+TemplateManager.apply_template("fancy", student2)
+
+
+
+
+#OUTPUT
+
+========================================
+ STUDENT REPORT
+========================================
+College : ABC Engineering College
+Name : Rahul
+Roll No : 101
+Marks : 85
+Result : PASS
+========================================
+
+Applying Fancy Template:
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+*** RAHUL ***
+Roll: 101 | Marks: 85
+College: ABC Engineering College
+STATUS: ✔ PASS
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+========================================
+ STUDENT REPORT
+========================================
+College : XYZ Institute of Technology
+Name : Priya
+Roll No : 102
+Marks : 35
+Result : FAIL
+========================================
+
+Applying Fancy Template:
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+*** PRIYA ***
+Roll: 102 | Marks: 35
+College: XYZ Institute of Technology
+STATUS: ✘ FAIL
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
