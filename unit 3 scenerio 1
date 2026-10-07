@@ -1,0 +1,104 @@
+# Hospital Patient Record System
+# Reads patient records from patients.csv
+
+import csv
+
+# Read patient records from patients.csv using the with statement
+with open("patients.csv", "r", newline="") as file:
+    reader = csv.DictReader(file)
+    patients = list(reader)
+
+# Display all patient details
+print("\n--- All Patient Details ---")
+
+for patient in patients:
+    print("Patient ID :", patient["Patient ID"])
+    print("Name       :", patient["Name"])
+    print("Age        :", patient["Age"])
+    print("Gender     :", patient["Gender"])
+    print("Disease    :", patient["Disease"])
+    print("Phone      :", patient["Phone"])
+    print("---------------------------")
+
+# Search for a patient using Patient ID
+search_id = input("\nEnter Patient ID to search: ")
+
+found = False
+
+for patient in patients:
+    if patient["Patient ID"] == search_id:
+        print("\n--- Patient Found ---")
+        print("Patient ID :", patient["Patient ID"])
+        print("Name       :", patient["Name"])
+        print("Age        :", patient["Age"])
+        print("Gender     :", patient["Gender"])
+        print("Disease    :", patient["Disease"])
+        print("Phone      :", patient["Phone"])
+        found = True
+        break
+
+if not found:
+    print("Patient not found.")
+
+
+# =========================================================
+# SAMPLE patients.csv FILE
+# =========================================================
+#
+# Patient ID,Name,Age,Gender,Disease,Phone
+# P101,Rahul Sharma,35,Male,Fever,9876543210
+# P102,Priya Patil,28,Female,Diabetes,9876501234
+# P103,Amit Kumar,45,Male,Blood Pressure,9988776655
+# P104,Neha Singh,32,Female,Asthma,9123456789
+
+
+# =========================================================
+# SAMPLE INPUT
+# =========================================================
+#
+# Enter Patient ID to search: P102
+
+
+# =========================================================
+# SAMPLE OUTPUT
+# =========================================================
+#
+# --- All Patient Details ---
+# Patient ID : P101
+# Name       : Rahul Sharma
+# Age        : 35
+# Gender     : Male
+# Disease    : Fever
+# Phone      : 9876543210
+# ---------------------------
+# Patient ID : P102
+# Name       : Priya Patil
+# Age        : 28
+# Gender     : Female
+# Disease    : Diabetes
+# Phone      : 9876501234
+# ---------------------------
+# Patient ID : P103
+# Name       : Amit Kumar
+# Age        : 45
+# Gender     : Male
+# Disease    : Blood Pressure
+# Phone      : 9988776655
+# ---------------------------
+# Patient ID : P104
+# Name       : Neha Singh
+# Age        : 32
+# Gender     : Female
+# Disease    : Asthma
+# Phone      : 9123456789
+# ---------------------------
+#
+# Enter Patient ID to search: P102
+#
+# --- Patient Found ---
+# Patient ID : P102
+# Name       : Priya Patil
+# Age        : 28
+# Gender     : Female
+# Disease    : Diabetes
+# Phone      : 9876501234
